@@ -1,10 +1,8 @@
 package com.advertisement.online.oadv;
 
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,25 +11,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.advertisement.online.oadv.Model.Post;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class UploadActivity extends AppCompatActivity {
 
@@ -40,6 +32,8 @@ public class UploadActivity extends AppCompatActivity {
     EditText uploadCategoryEditText, uploadRegionEditText, uploadDescriptionEdiText;
     String uploadCategory, uploadRegion, uploadDescription, key;
 
+    ProgressBar progressBar;
+
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser mUser = mAuth.getCurrentUser();
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -47,10 +41,13 @@ public class UploadActivity extends AppCompatActivity {
 
     Uri imageHoldUri = null;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBarUpload);
 
         uploadImageView = (ImageView) findViewById(R.id.uploadImageView);
         uploadCameraImageView = (ImageView) findViewById(R.id.uploadCameraImageView);
@@ -63,6 +60,8 @@ public class UploadActivity extends AppCompatActivity {
         uploadCategoryEditText = (EditText) findViewById(R.id.uploadCategoryEditText);
         uploadRegionEditText = (EditText) findViewById(R.id.uploadRegionEditText);
         uploadDescriptionEdiText = (EditText) findViewById(R.id.uploadDescriptionEditText);
+
+        uploadImageView.setImageDrawable(null);
 
         uploadGalleryImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +80,8 @@ public class UploadActivity extends AppCompatActivity {
             }
         });
 
+        progressBar.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
@@ -90,11 +91,11 @@ public class UploadActivity extends AppCompatActivity {
         if(requestCode==1 && resultCode == RESULT_OK){
             Uri imageUri = data.getData();
             imageHoldUri = imageUri;
-            uploadImageView.setImageURI(imageUri);
+            uploadImageView.setImageURI(imageHoldUri);
         } else if (requestCode==2 && resultCode == RESULT_OK) {
             Uri imageUri = data.getData();
             imageHoldUri = imageUri;
-            uploadImageView.setImageURI(imageUri);
+            uploadImageView.setImageURI(imageHoldUri);
         }
     }
 
@@ -106,12 +107,14 @@ public class UploadActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int i = item.getItemId();
         if (i == R.id.action_post){
             uploadCategory = uploadCategoryEditText.getText().toString().trim();
             uploadDescription = uploadDescriptionEdiText.getText().toString().trim();
             uploadRegion = uploadRegionEditText.getText().toString().trim();
-            if((!TextUtils.isEmpty(uploadCategory)) || (!TextUtils.isEmpty(uploadDescription)) || (!TextUtils.isEmpty(uploadRegion))){
+            if((!TextUtils.isEmpty(uploadCategory)) && (!TextUtils.isEmpty(uploadDescription)) && (!TextUtils.isEmpty(uploadRegion)) && (uploadImageView.getDrawable()!=null)){
+                progressBar.setVisibility(View.VISIBLE);
                 writeNewPost(mUser.getUid(),uploadCategory,uploadRegion,uploadDescription);
 
                 mStorage.child("posts").child(key+".jpg").putFile(imageHoldUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -126,10 +129,11 @@ public class UploadActivity extends AppCompatActivity {
                         });
                     }
                 });
-
+                progressBar.setVisibility(View.INVISIBLE);
+                finish();
                 startActivity(new Intent(UploadActivity.this,MainActivity.class));
             }else{
-                Toast.makeText(getApplicationContext(),"Please write category, region, and description",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Please insert picture, category, region, and description",Toast.LENGTH_SHORT).show();
             }
 
             return true;
@@ -142,10 +146,6 @@ public class UploadActivity extends AppCompatActivity {
     private void writeNewPost(String userID, String category, String region, String description){
         key = mDatabase.child("posts").push().getKey();
         Post post = new Post(userID,category,region,description);
-        Map<String, Object> postValues = post.toMap();
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/posts/"+key, postValues);
-        childUpdates.put("/users/"+userID+"/posts/"+key,postValues);
-        mDatabase.updateChildren(childUpdates);
+        mDatabase.child("posts").child(key).setValue(post);
     }
 }

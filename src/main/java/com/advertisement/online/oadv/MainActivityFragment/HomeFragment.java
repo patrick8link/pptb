@@ -1,6 +1,7 @@
 package com.advertisement.online.oadv.MainActivityFragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,8 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.advertisement.online.oadv.DetailPostActivity;
 import com.advertisement.online.oadv.MainActivity;
 import com.advertisement.online.oadv.MainActivityAdapter.HomeAdapter;
+import com.advertisement.online.oadv.Model.Post;
 import com.advertisement.online.oadv.R;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,7 +49,10 @@ public class HomeFragment extends Fragment {
     int length=0;
     int i;
     int j = 0;
+
+    Post posts = new Post();
     ArrayList<String> mUri = new ArrayList<String>();
+    ArrayList<String > key = new ArrayList<String>();
 
     @Nullable
     @Override
@@ -57,7 +63,7 @@ public class HomeFragment extends Fragment {
 
         mDatabase.keepSynced(true);
 
-        mDatabase.child("posts").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("posts").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count = (int) dataSnapshot.getChildrenCount();
@@ -65,15 +71,16 @@ public class HomeFragment extends Fragment {
                 Log.i(TAG, "onDataChange: "+length);
                 String[] post = new String[length];
 
+
                 for (i=0;i<length;i++){
                     post[i] = String.valueOf(i);
                 }
 
                 for (DataSnapshot children : dataSnapshot.getChildren()){
                     mUri.add(String.valueOf(children.child("URL").getValue()));
+                    key.add(children.getKey());
                 }
 
-                collectURL((Map<String,Object>) dataSnapshot.getValue());
                 gridView.setAdapter(new HomeAdapter(getActivity(), post, mUri));
 
             }
@@ -84,31 +91,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        Log.i(TAG, "onCreateView: "+length);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),""+position,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(),DetailPostActivity.class);
+                intent.putExtra(DetailPostActivity.EXTRA_POST_KEY,key.get(position));
+                startActivity(intent);
+                Toast.makeText(getActivity(),""+key.get(position),Toast.LENGTH_SHORT).show();
             }
         });
 
         return view;
-    }
-
-    private void collectURL(Map<String,Object> users) {
-
-        ArrayList<String> URL = new ArrayList<>();
-
-        //iterate through each user, ignoring their UID
-        for (Map.Entry<String, Object> entry : users.entrySet()){
-
-            //Get user map
-            Map singleUser = (Map) entry.getValue();
-            //Get phone field and append to list
-            URL.add((String) singleUser.get("URL"));
-            mUri.add((String)singleUser.get("URL"));
-        }
 
     }
+
+
 }
