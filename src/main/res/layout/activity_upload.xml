@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/uploadScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:fillViewport="true"
+        tools:context=".UploadActivity"
+        android:layout_marginBottom="40dp">
+
+        <RelativeLayout
+            android:id="@+id/uploadRelativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.526"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/uploadImageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:minHeight="100dp"
+                app:srcCompat="@android:color/darker_gray" />
+
+            <EditText
+                android:id="@+id/uploadCategoryEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/uploadImageView"
+                android:layout_toEndOf="@+id/uploadCategoryTextView"
+                android:hint="Category"
+                android:inputType="textPersonName"
+                android:textAlignment="textStart"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/uploadCategoryTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/uploadCategoryEditText"
+                android:layout_below="@+id/uploadImageView"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Category :"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/uploadRegionEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/uploadCategoryEditText"
+                android:layout_toEndOf="@+id/uploadRegionTextView"
+                android:hint="Region"
+                android:inputType="textPersonName"
+                android:textAlignment="textStart"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/uploadRegionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/uploadRegionEditText"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Region:"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/uploadDescriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/uploadDescriptionTextView"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/colorGrey"
+                android:hint="Description"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/uploadDescriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/uploadRegionEditText"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Description:"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/uploadRelativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/uploadCameraImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:srcCompat="@android:drawable/ic_menu_camera"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            />
+
+        <ImageView
+            android:id="@+id/uploadGalleryImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:srcCompat="@android:drawable/ic_menu_gallery"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+        />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
+
