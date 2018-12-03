@@ -42,32 +42,23 @@
 
             <ImageView
                 android:id="@+id/uploadImageView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:minHeight="100dp"
-                app:srcCompat="@android:color/darker_gray" />
-
-            <EditText
-                android:id="@+id/uploadCategoryEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/uploadImageView"
-                android:layout_toEndOf="@+id/uploadCategoryTextView"
-                android:hint="Category"
-                android:inputType="textPersonName"
-                android:textAlignment="textStart"
-                android:textSize="20sp" />
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:cropToPadding="false"
+                android:scaleType="fitXY"
+                />
 
             <TextView
                 android:id="@+id/uploadCategoryTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/uploadCategoryEditText"
                 android:layout_below="@+id/uploadImageView"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
@@ -75,25 +66,35 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/uploadRegionEditText"
+            <Spinner
+                android:id="@+id/uploadCategorySpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/uploadCategoryEditText"
-                android:layout_toEndOf="@+id/uploadRegionTextView"
-                android:hint="Region"
-                android:inputType="textPersonName"
-                android:textAlignment="textStart"
+                android:layout_alignBottom="@+id/uploadCategoryTextView"
+                android:layout_toEndOf="@+id/uploadCategoryTextView"
+                android:textColor="@color/colorBlack"
                 android:textSize="20sp" />
+
 
             <TextView
                 android:id="@+id/uploadRegionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/uploadRegionEditText"
+                android:layout_below="@+id/uploadCategoryTextView"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:text="Region:"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                />
+
+            <Spinner
+                android:id="@+id/uploadRegionSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/uploadRegionTextView"
+                android:layout_toEndOf="@+id/uploadRegionTextView"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp" />
 
@@ -112,7 +113,8 @@
                 android:id="@+id/uploadDescriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/uploadRegionEditText"
+                android:layout_below="@+id/uploadRegionTextView"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:text="Description:"

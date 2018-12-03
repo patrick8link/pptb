@@ -26,7 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -35,15 +34,16 @@ import java.util.Collections;
 import static android.support.constraint.Constraints.TAG;
 import static java.lang.String.valueOf;
 
-public class HomeFragment extends Fragment {
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser mUser = mAuth.getCurrentUser();
-    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+public class ProfileFragment extends Fragment {
 
-    int length=0;
-    int i;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private DatabaseReference mDatabase;
+    private StorageReference mStorage;
 
+    private GridView profileGridView;
+
+    private int length;
 
     Post posts = new Post();
     ArrayList<String> mUri = new ArrayList<String>();
@@ -55,13 +55,19 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile,null);
 
-        View view = inflater.inflate(R.layout.fragment_home,null);
-        final GridView gridView = (GridView) view.findViewById(R.id.homeGridView);
+        profileGridView = (GridView) view.findViewById(R.id.profileGridView);
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mDatabase.keepSynced(true);
 
-        mDatabase.child("posts").addValueEventListener(new ValueEventListener() {
+        length = 0  ;
+
+        mDatabase.child("users").child(mUser.getUid()).child("posts").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count = (int) dataSnapshot.getChildrenCount();
@@ -69,15 +75,14 @@ public class HomeFragment extends Fragment {
                 Log.i(TAG, "onDataChange: "+length);
                 String[] post = new String[length];
 
-
-                for (i=0;i<length;i++){
-                    post[i] = valueOf(i);
+                for (int i=0;i<length;i++){
+                    post[i] = String.valueOf(i);
                 }
 
                 for (DataSnapshot children : dataSnapshot.getChildren()){
                     posts = children.getValue(Post.class);
                     vCount.add(posts.getViewCount());
-                    mUri.add(valueOf(children.child("URL").getValue()));
+                    mUri.add(String.valueOf(children.child("URL").getValue()));
                     key.add(children.getKey());
                     category.add(valueOf(children.child("category").getValue()));
                     region.add(valueOf(children.child("region").getValue()));
@@ -87,8 +92,7 @@ public class HomeFragment extends Fragment {
                 Collections.reverse(mUri);
                 Collections.reverse(category);
                 Collections.reverse(region);
-                gridView.setAdapter(new HomeAdapter(getActivity(), post, mUri));
-
+                profileGridView.setAdapter(new HomeAdapter(getActivity(), post, mUri));
             }
 
             @Override
@@ -97,29 +101,28 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        profileGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            mDatabase.child("posts").child(key.get(position)).child("viewCount").setValue(vCount.get(position)+1);
-            getActivity().finish();
-            startActivity(getActivity().getIntent());
-            Intent intent = new Intent(getActivity(),DetailPostActivity.class);
-            intent.putExtra(DetailPostActivity.EXTRA_POST_KEY,key.get(position));
-            startActivity(intent);
-            Toast.makeText(getActivity(),""+key.get(position),Toast.LENGTH_SHORT).show();
+                mDatabase.child("posts").child(key.get(position)).child("viewCount").setValue(vCount.get(position)+1);
+                getActivity().finish();
+                startActivity(getActivity().getIntent());
+                Intent intent = new Intent(getActivity(),DetailPostActivity.class);
+                intent.putExtra(DetailPostActivity.EXTRA_POST_KEY,key.get(position));
+                startActivity(intent);
+                Toast.makeText(getActivity(),""+key.get(position),Toast.LENGTH_SHORT).show();
             }
         });
 
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        profileGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                System.out.println("THIS IS ANOTHER TEST "+region+ " and "+category);
                 mDatabase.child("posts").child(key.get(position)).removeValue();
                 mDatabase.child("category").child(category.get(position)).child(region.get(position)).child(key.get(position)).removeValue();
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("posts").child(key.get(position)).removeValue();
+                mDatabase.child("users").child(mUser.getUid()).child("posts").child(key.get(position)).removeValue();
 
-                mStorage.child("posts").child(key.get(position)+".jpg").delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                mStorage.child("posts").child(key.get(position)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         System.out.println("File Deleted");
@@ -135,8 +138,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
         return view;
-
     }
-
 }

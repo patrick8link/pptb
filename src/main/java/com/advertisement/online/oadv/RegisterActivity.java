@@ -45,14 +45,10 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         }
                     });
-
-                }else {
+                } else {
                     Toast.makeText(RegisterActivity.this,"Registration Failed",Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
-
     }
-
 }

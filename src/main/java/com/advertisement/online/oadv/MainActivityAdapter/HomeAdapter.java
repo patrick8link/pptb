@@ -1,9 +1,6 @@
 package com.advertisement.online.oadv.MainActivityAdapter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.media.Image;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.advertisement.online.oadv.MainActivity;
-import com.advertisement.online.oadv.MainActivityFragment.HomeFragment;
 import com.advertisement.online.oadv.R;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class HomeAdapter extends BaseAdapter {
@@ -57,9 +52,12 @@ public class HomeAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = mContext.getLayoutInflater();
         View view = inflater.inflate(R.layout.item_home,null,true);
+
         ImageView homeImageView = (ImageView) view.findViewById(R.id.homeImageView);
         TextView homeTextView = (TextView) view.findViewById(R.id.homeTextView);
+
         Glide.with(mContext).load(mUri.get(position)).into(homeImageView);
+
         return view;
     }
 

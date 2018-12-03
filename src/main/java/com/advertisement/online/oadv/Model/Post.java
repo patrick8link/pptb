@@ -12,16 +12,18 @@ public class Post {
     public String category;
     public String region;
     public String desc;
+    public int viewCount;
 
     public Post(){
 
     }
 
-    public Post(String userID, String category, String region, String desc){
+    public Post(String userID, String category, String region, String desc, int viewCount){
         this.userID = userID;
         this.category = category;
         this.region = region;
         this.desc = desc;
+        this.viewCount = viewCount;
     }
 
     @Exclude
@@ -32,6 +34,14 @@ public class Post {
         result.put("region",region);
         result.put("desc",desc);
         return result;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
     }
 
     public String getUserID() {
