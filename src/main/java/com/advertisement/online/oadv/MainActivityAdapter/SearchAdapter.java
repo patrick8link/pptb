@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.advertisement.online.oadv.R;
@@ -15,11 +16,14 @@ public class SearchAdapter extends BaseAdapter {
 
     private Activity mContext;
     private List<String> searchCategories;
+    private ImageView searchCategoryImageView;
     private TextView searchCategoryTextView;
+    private int[] searchCategoriesImage;
 
-    public SearchAdapter(Activity context, List<String> searchCategory){
+    public SearchAdapter(Activity context, List<String> searchCategory, int[] searchCategoryImage ){
         this.mContext = context;
         this.searchCategories = searchCategory;
+        this.searchCategoriesImage = searchCategoryImage;
 
     }
 
@@ -38,13 +42,17 @@ public class SearchAdapter extends BaseAdapter {
         return 0;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = mContext.getLayoutInflater();
         View view = inflater.inflate(R.layout.item_search,null, true);
 
+        searchCategoryImageView = (ImageView) view.findViewById(R.id.searchCategoryImageView);
         searchCategoryTextView = (TextView) view.findViewById(R.id.searchCategoryTextView);
 
+        searchCategoryImageView.setImageResource(searchCategoriesImage[position]);
         searchCategoryTextView.setText(searchCategories.get(position));
 
         return view;

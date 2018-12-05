@@ -5,36 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.advertisement.online.oadv.MainActivity;
-import com.advertisement.online.oadv.MainActivityAdapter.HomeAdapter;
 import com.advertisement.online.oadv.MainActivityAdapter.SearchAdapter;
-import com.advertisement.online.oadv.Model.Post;
 import com.advertisement.online.oadv.R;
 import com.advertisement.online.oadv.SearchActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.zip.InflaterInputStream;
-
-import static android.support.constraint.Constraints.TAG;
 
 public class SearchFragment extends Fragment {
 
@@ -43,6 +31,7 @@ public class SearchFragment extends Fragment {
     Spinner searchRegionSpinner;
 
     List<String> categoryList;
+    int[] categoryImageList;
 
     DatabaseReference mDatabase;
 
@@ -63,20 +52,35 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search,null);
 
         List<String> arrayCategoryList = new ArrayList<String>();
+        int[] arrayCategoryImageList;
 
         searchRegionSpinner = (Spinner) view.findViewById(R.id.searchRegionSpinner);
         searchGridView = (GridView) view.findViewById(R.id.searchGridView);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+                mDatabase = FirebaseDatabase.getInstance().getReference();
 
         categoryList = Arrays.asList(getResources().getStringArray(R.array.category_array));
+
+        arrayCategoryImageList = new int[]{
+                R.drawable.foodbev,
+                R.drawable.komp,
+                R.drawable.fash,
+                R.drawable.olrgh,
+                R.drawable.games,
+                R.drawable.shp,
+                R.drawable.musik,
+                R.drawable.tiket,
+                R.drawable.hotl,
+                R.drawable.pensilpaper,
+                R.drawable.othr,
+        };
 
         for (int i=0;i<categoryList.size()-1;i++){
             arrayCategoryList.add(categoryList.get(i+1));
         }
 
 
-        searchGridView.setAdapter(new SearchAdapter(getActivity(),arrayCategoryList));
+        searchGridView.setAdapter(new SearchAdapter(getActivity(),arrayCategoryList,arrayCategoryImageList));
 
         stringRegionArray = getResources().getStringArray(R.array.region_array);
 

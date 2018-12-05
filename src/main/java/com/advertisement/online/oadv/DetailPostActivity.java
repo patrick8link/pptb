@@ -1,16 +1,18 @@
 package com.advertisement.online.oadv;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.advertisement.online.oadv.Model.Post;
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +28,7 @@ public class DetailPostActivity extends AppCompatActivity {
     String mPostKey;
 
     TextView detailCategoryTextView,detailRegionTextView,detailDescTextView;
-    ImageView detailImageView;
+    PhotoView detailImageView;
 
     DatabaseReference mDatabase;
     FirebaseAuth mAuth;
@@ -37,11 +39,17 @@ public class DetailPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+
         detailCategoryTextView = (TextView) findViewById(R.id.detailCategoryTextView);
         detailRegionTextView = (TextView) findViewById(R.id.detailRegionTextView);
         detailDescTextView = (TextView) findViewById(R.id.detailDescriptionTextView);
 
-        detailImageView = (ImageView) findViewById(R.id.detailImageView);
+        detailImageView = (PhotoView) findViewById(R.id.detailImageView);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -102,9 +110,10 @@ public class DetailPostActivity extends AppCompatActivity {
                 });
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(myIntent, 0);
         }
-
+        return super.onOptionsItemSelected(item);
     }
 
     private void writeNewPost(String userID, String category, String region, String description,String key, String uri){

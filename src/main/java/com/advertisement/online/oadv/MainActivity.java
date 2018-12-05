@@ -60,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_upload :
                 startActivity(new Intent(MainActivity.this,UploadActivity.class));
                 return true;
-            case R.id.action_settings:
-                return true;
             case R.id.action_logout:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(MainActivity.this,LoginActivity.class));

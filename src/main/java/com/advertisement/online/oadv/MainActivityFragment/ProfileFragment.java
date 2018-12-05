@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStorage = FirebaseStorage.getInstance().getReference();
 
         mDatabase.keepSynced(true);
 
@@ -110,7 +112,6 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getActivity(),DetailPostActivity.class);
                 intent.putExtra(DetailPostActivity.EXTRA_POST_KEY,key.get(position));
                 startActivity(intent);
-                Toast.makeText(getActivity(),""+key.get(position),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -121,8 +122,11 @@ public class ProfileFragment extends Fragment {
                 mDatabase.child("posts").child(key.get(position)).removeValue();
                 mDatabase.child("category").child(category.get(position)).child(region.get(position)).child(key.get(position)).removeValue();
                 mDatabase.child("users").child(mUser.getUid()).child("posts").child(key.get(position)).removeValue();
+                mDatabase.child("users").child(mUser.getUid()).child("kept").child(key.get(position)).removeValue();
 
-                mStorage.child("posts").child(key.get(position)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                System.out.println("PRINTING THIS FOR ERROR "+key.get(position)+".jpg");
+
+                mStorage.child("posts").child(key.get(position)+".jpg").delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         System.out.println("File Deleted");

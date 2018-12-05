@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.advertisement.online.oadv.DetailPostActivity;
 import com.advertisement.online.oadv.MainActivityAdapter.HomeAdapter;
@@ -106,34 +105,9 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getActivity(),DetailPostActivity.class);
             intent.putExtra(DetailPostActivity.EXTRA_POST_KEY,key.get(position));
             startActivity(intent);
-            Toast.makeText(getActivity(),""+key.get(position),Toast.LENGTH_SHORT).show();
             }
         });
 
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                System.out.println("THIS IS ANOTHER TEST "+region+ " and "+category);
-                mDatabase.child("posts").child(key.get(position)).removeValue();
-                mDatabase.child("category").child(category.get(position)).child(region.get(position)).child(key.get(position)).removeValue();
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("posts").child(key.get(position)).removeValue();
-
-                mStorage.child("posts").child(key.get(position)+".jpg").delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        System.out.println("File Deleted");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println("File failed to be deleted");
-                    }
-                });
-
-                return true;
-            }
-        });
 
         return view;
 

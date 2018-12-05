@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="array_of_categories_image">
+        <item>@drawable/ic_home_black_24dp</item>
+        <item>@drawable/ic_vpn_key_black_24dp</item>
+    </integer-array>
+</resources>

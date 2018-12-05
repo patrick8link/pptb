@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,9 +25,16 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText regEmailEditText = (EditText) findViewById(R.id.regEmailEditText);
         final EditText regPasswordEditText = (EditText) findViewById(R.id.regPasswordEditText);
         Button registerButton = (Button) findViewById(R.id.registerButton);
+        TextView loginTextView = (TextView) findViewById(R.id.loginTextView);
 
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
+        loginTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            }
+        });
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,5 +58,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+
+
     }
+
+
 }

@@ -16,6 +16,13 @@
         <item>Food &amp; Beverages</item>
         <item>Electronic</item>
         <item>Fashion</item>
+        <item>Sports</item>
+        <item>Games</item>
+        <item>Supermarket</item>
+        <item>Music</item>
+        <item>Ticket</item>
+        <item>Hotel</item>
+        <item>Stationary</item>
         <item>Other</item>
     </string-array>
     <string-array name="region_array">

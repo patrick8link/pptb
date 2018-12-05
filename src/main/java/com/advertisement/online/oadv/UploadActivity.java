@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -64,6 +65,11 @@ public class UploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         progressBar = (ProgressBar) findViewById(R.id.progressBarUpload);
 
@@ -193,6 +199,8 @@ public class UploadActivity extends AppCompatActivity {
             actionPost();
             return true;
         }else{
+            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivityForResult(myIntent, 0);
             return super.onOptionsItemSelected(item);
         }
 
